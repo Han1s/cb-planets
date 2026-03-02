@@ -4,16 +4,21 @@ import "./globals.css";
 import { PlanetsProvider } from "@/context/PlanetsContext";
 import { Suspense } from "react";
 
-const getPlanets = async () => {
-  const res = await fetch("https://swapi.info/api/planets", {
-    next: { revalidate: 3600, tags: ["planets"] },
-  });
+const getPlanets = async (): Promise<string | Planet[]> => {
+  try {
+    const res = await fetch("https://swapi.info/api/planets", {
+      next: { revalidate: 3600, tags: ["planets"] },
+    });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch planets");
+    if (!res.ok) {
+      return `API error: ${res.status}`;
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Planet fetch failed:", error);
+    return "Failed to load planets";
   }
-
-  return res.json();
 };
 
 const geistSans = Geist({

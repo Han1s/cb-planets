@@ -3,7 +3,7 @@
 import { createContext, useContext } from "react";
 
 type PlanetsContextType = {
-  planets: Planet[];
+  planets: Planet[] | string;
 };
 
 const PlanetsContext = createContext<PlanetsContextType | null>(null);
@@ -12,7 +12,7 @@ export function PlanetsProvider({
   planets,
   children,
 }: {
-  planets: Planet[];
+  planets: Planet[] | string;
   children: React.ReactNode;
 }) {
   return (
