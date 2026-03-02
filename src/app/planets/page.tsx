@@ -1,15 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { usePlanets } from "@/context/PlanetsContext";
 import Link from "next/link";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { revalidatePlanets } from "@/actions/revalidatePlanets";
 import PlanetCard from "@/components/PlanetCard";
+import PlanetDetailModal from "@/components/PlanetDetailModal";
 
 const PAGE_SIZE = 10;
 
 const Page = () => {
+  const [selectedPlanet, setSelectedPlanet] = useState("");
+
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
 
@@ -46,8 +49,24 @@ const Page = () => {
 
   const hasNoPlanets = !paginatedPlanets.length;
 
+  const closeDetailsHandler = () => {
+    setSelectedPlanet("");
+  };
+
+  const viewDetailsHandler = (planetName: string) => {
+    setSelectedPlanet(planetName);
+  };
+
   return (
     <div className={"flex flex-col gap-10"}>
+      {selectedPlanet && (
+        <PlanetDetailModal
+          planet={
+            paginatedPlanets.find((planet) => planet.name === selectedPlanet)!
+          }
+          onClose={closeDetailsHandler}
+        />
+      )}
       <h1 className={"text text-4xl font-bold text-center"}>
         Planets from Star Wars
       </h1>
@@ -58,7 +77,11 @@ const Page = () => {
           </div>
         ) : (
           paginatedPlanets.map((planet: Planet) => (
-            <PlanetCard planet={planet} key={planet.name} />
+            <PlanetCard
+              planet={planet}
+              key={planet.name}
+              viewDetails={viewDetailsHandler}
+            />
           ))
         )}
       </div>
