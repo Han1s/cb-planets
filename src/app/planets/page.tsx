@@ -3,7 +3,8 @@
 import React from "react";
 import { usePlanets } from "@/context/PlanetsContext";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { revalidatePlanets } from "@/actions/revalidatePlanets";
 
 interface PlanetsPageProps {
   searchParams: { page?: string };
@@ -15,6 +16,8 @@ const Page = (props: PlanetsPageProps) => {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
 
+  const router = useRouter();
+
   const { planets } = usePlanets();
 
   const totalPages = Math.ceil(planets.length / 10);
@@ -23,6 +26,11 @@ const Page = (props: PlanetsPageProps) => {
   const endIndex = startIndex + PAGE_SIZE;
 
   const paginatedPlanets = planets.slice(startIndex, endIndex);
+
+  const refreshPlanetsHandler = async () => {
+    await revalidatePlanets();
+    router.refresh();
+  };
 
   return (
     <div>
@@ -41,6 +49,10 @@ const Page = (props: PlanetsPageProps) => {
           <Link href={`/planets?page=${page + 1}`}>Next →</Link>
         )}
       </div>
+
+      <button className={"btn brn-prinmary"} onClick={refreshPlanetsHandler}>
+        Refresh planets
+      </button>
     </div>
   );
 };

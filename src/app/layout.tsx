@@ -5,7 +5,7 @@ import { PlanetsProvider } from "@/context/PlanetsContext";
 
 const getPlanets = async () => {
   const res = await fetch("https://swapi.info/api/planets", {
-    next: { revalidate: 3600 },
+    next: { revalidate: 3600, tags: ["planets"] },
   });
 
   if (!res.ok) {
