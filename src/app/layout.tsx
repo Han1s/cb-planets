@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PlanetsProvider } from "@/context/PlanetsContext";
+import { Suspense } from "react";
 
 const getPlanets = async () => {
   const res = await fetch("https://swapi.info/api/planets", {
@@ -33,7 +34,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{
-  searchParams: string;
   children: React.ReactNode;
 }>) {
   const planets = await getPlanets();
@@ -45,7 +45,9 @@ export default async function RootLayout({
       >
         <div className="flex min-h-screen items-center justify-center font-sans bg-black">
           <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16bg-black sm:items-start">
-            <PlanetsProvider planets={planets}>{children}</PlanetsProvider>
+            <PlanetsProvider planets={planets}>
+              <Suspense fallback={"Loading planets..."}>{children}</Suspense>
+            </PlanetsProvider>
           </main>
         </div>
       </body>

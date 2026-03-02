@@ -6,13 +6,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { revalidatePlanets } from "@/actions/revalidatePlanets";
 
-interface PlanetsPageProps {
-  searchParams: { page?: string };
-}
-
 const PAGE_SIZE = 10;
 
-const Page = (props: PlanetsPageProps) => {
+const Page = () => {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
 
