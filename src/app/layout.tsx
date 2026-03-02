@@ -33,6 +33,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{
+  searchParams: string;
   children: React.ReactNode;
 }>) {
   const planets = await getPlanets();
