@@ -44,7 +44,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="flex min-h-screen items-center justify-center font-sans bg-black">
-          <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16bg-black sm:items-start">
+          <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-12 px-16bg-black sm:items-start">
             <PlanetsProvider planets={planets}>
               <Suspense fallback={"Loading planets..."}>{children}</Suspense>
             </PlanetsProvider>

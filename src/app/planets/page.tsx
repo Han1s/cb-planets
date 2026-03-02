@@ -5,6 +5,7 @@ import { usePlanets } from "@/context/PlanetsContext";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { revalidatePlanets } from "@/actions/revalidatePlanets";
+import PlanetCard from "@/components/PlanetCard";
 
 const PAGE_SIZE = 10;
 
@@ -28,27 +29,48 @@ const Page = () => {
     router.refresh();
   };
 
+  const pageButtonClasses = "btn btn-outline";
+
   return (
-    <div>
-      {paginatedPlanets.map((planet) => (
-        <div key={planet.name}>{planet.name}</div>
-      ))}
+    <div className={"flex flex-col gap-10"}>
+      <h1 className={"text text-4xl font-bold text-center"}>
+        Planets from Star Wars
+      </h1>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {paginatedPlanets.map((planet: Planet) => (
+          <PlanetCard planet={planet} key={planet.name} />
+        ))}
+      </div>
 
-      <div style={{ marginTop: 20 }}>
-        {page > 1 && <Link href={`/planets?page=${page - 1}`}>← Previous</Link>}
+      <div className="flex justify-center items-center gap-4">
+        {page > 1 && (
+          <Link
+            href={`/planets?page=${page - 1}`}
+            className={pageButtonClasses}
+          >
+            ← Previous
+          </Link>
+        )}
 
-        <span style={{ margin: "0 10px" }}>
+        <span className="badge badge-lg">
           Page {page} of {totalPages}
         </span>
 
         {page < totalPages && (
-          <Link href={`/planets?page=${page + 1}`}>Next →</Link>
+          <Link
+            href={`/planets?page=${page + 1}`}
+            className={pageButtonClasses}
+          >
+            Next →
+          </Link>
         )}
       </div>
 
-      <button className={"btn brn-prinmary"} onClick={refreshPlanetsHandler}>
-        Refresh planets
-      </button>
+      <div className={"text-center"}>
+        <button className={"btn btn-accent"} onClick={refreshPlanetsHandler}>
+          Refresh planets
+        </button>
+      </div>
     </div>
   );
 };
